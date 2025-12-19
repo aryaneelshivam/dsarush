@@ -2,81 +2,13 @@ import React, { useState, useEffect, useRef, useCallback, useLayoutEffect, useMe
 import { Snippet, TestStats } from '../types';
 import { generateSyntaxMap } from '../utils/syntaxHighlighting';
 import { MousePointerClick, Zap, Flame } from 'lucide-react';
+import { soundEngine } from '../services/soundEngine';
 
 interface TypingAreaProps {
   snippet: Snippet;
   onComplete: (stats: TestStats) => void;
   focused: boolean;
 }
-
-// Simple audio synth for keyboard sounds
-class SoundEngine {
-  private ctx: AudioContext | null = null;
-
-  init() {
-    if (!this.ctx) {
-      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-      if (AudioContext) {
-        this.ctx = new AudioContext();
-      }
-    }
-    if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
-    }
-  }
-
-  playClick(type: 'correct' | 'error' | 'combo') {
-    if (!this.ctx) this.init();
-    if (!this.ctx) return;
-
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-
-    if (type === 'correct') {
-      // Crisp mechanical "thock"
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(600, t);
-      osc.frequency.exponentialRampToValueAtTime(100, t + 0.05);
-
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.3, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
-
-      osc.start(t);
-      osc.stop(t + 0.1);
-    } else if (type === 'combo') {
-      // High pitched ding for combo milestone
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, t);
-      osc.frequency.exponentialRampToValueAtTime(1200, t + 0.1);
-
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.1, t + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-
-      osc.start(t);
-      osc.stop(t + 0.3);
-    } else {
-      // Muted error thud
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(200, t);
-      osc.frequency.linearRampToValueAtTime(100, t + 0.1);
-
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.2, t + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-
-      osc.start(t);
-      osc.stop(t + 0.15);
-    }
-  }
-}
-
-const soundEngine = new SoundEngine();
 
 export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, focused }) => {
   const [userInput, setUserInput] = useState<string>('');
@@ -88,6 +20,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
   const [maxCombo, setMaxCombo] = useState<number>(0);
   const [multiplier, setMultiplier] = useState<number>(1.0);
   const [comboShake, setComboShake] = useState<boolean>(false);
+  const [errorShake, setErrorShake] = useState<boolean>(false);
 
   // Refs for tracking logic
   const lastKeyTime = useRef<number>(Date.now());
@@ -243,6 +176,8 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
         setErrors(prev => prev + 1);
         soundEngine.playClick('error');
         breakCombo();
+        setErrorShake(true);
+        setTimeout(() => setErrorShake(false), 200);
       } else {
         // Correct Input
         soundEngine.playClick('correct');
@@ -351,10 +286,10 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
   };
 
   return (
-    <div className="w-full max-w-6xl relative group outline-none" tabIndex={0}>
+    <div className={`w-full max-w-6xl relative group outline-none ${errorShake ? 'animate-shake' : ''}`} tabIndex={0}>
       {/* Focus Overlay */}
       {!focused && (
-        <div className="absolute inset-0 z-50 backdrop-blur-[2px] flex items-center justify-center bg-mt-bg/50 transition-opacity duration-300 rounded-lg">
+        <div className="absolute inset-0 z-50 backdrop-blur-fix flex items-center justify-center bg-mt-bg/50 transition-opacity duration-300 rounded-lg">
           <div className="flex items-center gap-2 text-mt-text bg-mt-bg p-4 rounded-lg shadow-lg border border-mt-sub/20">
             <MousePointerClick size={20} />
             <span>Click to focus</span>
@@ -383,7 +318,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
       <div
         ref={containerRef}
         className="font-mono text-3xl md:text-4xl leading-relaxed whitespace-pre overflow-auto relative min-h-[300px] max-h-[60vh] select-none pl-8 pr-4 py-12 border-l border-mt-sub/5 scroll-smooth no-scrollbar"
-        style={{ tabSize: 4 }}
+        style={{ tabSize: 4, MozTabSize: 4 } as React.CSSProperties}
       >
         {/* Floating Smooth Caret */}
         <div

@@ -20,10 +20,18 @@
     <meta property="twitter:title" content="DSArush - Master DSA Patterns Through Typing" />
     <meta property="twitter:description" content="Build muscle memory for Data Structures and Algorithms patterns. A distraction-free speed typing tool for developers." />
     <meta property="twitter:image" content="https://dsarush.vercel.app/og-image.png" />
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#323437">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    </noscript>
     <script>
       tailwind.config = {
         theme: {
@@ -52,6 +60,7 @@
             animation: {
               'fade-in': 'fadeIn 0.5s ease-out forwards',
               'slide-up': 'slideUp 0.5s ease-out forwards',
+              'shake': 'shake 0.15s ease-in-out infinite',
             },
             keyframes: {
               fadeIn: {
@@ -61,6 +70,11 @@
               slideUp: {
                 '0%': { opacity: '0', transform: 'translateY(10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              shake: {
+                '0%, 100%': { transform: 'translateX(0)' },
+                '25%': { transform: 'translateX(-2px)' },
+                '75%': { transform: 'translateX(2px)' },
               }
             }
           }
@@ -72,6 +86,9 @@
         background-color: #323437;
         color: #d1d0c5;
         font-family: 'JetBrains Mono', monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
       }
       /* Hide scrollbar for zen feel */
       .no-scrollbar::-webkit-scrollbar {
@@ -80,6 +97,18 @@
       .no-scrollbar {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
+      }
+      
+      /* Cross-browser mask for linear fade effect */
+      .mask-linear-fade {
+        -webkit-mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
+        mask-image: linear-gradient(to right, transparent, black 20px, black calc(100% - 20px), transparent);
+      }
+
+      /* Safari backdrop fixation */
+      .backdrop-blur-fix {
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
       }
     </style>
   <script type="importmap">

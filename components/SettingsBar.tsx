@@ -8,6 +8,7 @@ interface SettingsBarProps {
   setTopic: (t: string) => void;
   subTopic: string | undefined;
   setSubTopic: (st: string | undefined) => void;
+  setTopicSubTopic: (t: string, st: string | undefined) => void;
   difficulty: Difficulty;
   setDifficulty: (d: Difficulty) => void;
   language: Language;
@@ -20,6 +21,7 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
   setTopic,
   subTopic,
   setSubTopic,
+  setTopicSubTopic,
   difficulty,
   setDifficulty,
   language,
@@ -27,14 +29,14 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
   loading
 }) => {
 
-  const availableOperations = useMemo(() => {
-    return getOperationsForTopic(currentTopic, language);
-  }, [currentTopic, language]);
+  const handleSubTopicChange = (t: string, st: string | undefined) => {
+    setTopicSubTopic(t, st);
+  };
 
   const handleTopicClick = (t: string) => {
     if (t !== currentTopic) {
       setTopic(t);
-      setSubTopic(undefined); // Reset subtopic when main topic changes
+      setSubTopic(undefined);
     }
   };
 
@@ -81,51 +83,53 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
             <LayoutList size={14} />
           </div>
           <div className="flex items-center justify-start lg:justify-center gap-1 md:gap-1 min-w-max px-2">
-            {TOPICS.map(t => (
-              <button
-                key={t}
-                onClick={() => handleTopicClick(t)}
-                disabled={loading}
-                className={`
-                        px-2.5 py-1 rounded transition-colors duration-200 outline-none whitespace-nowrap
-                        ${currentTopic === t
-                    ? 'text-mt-main'
-                    : 'hover:text-mt-text'}
-                      `}
-              >
-                {t === 'Binary Search Tree' ? 'BST' : t}
-              </button>
-            ))}
+            {TOPICS.map(t => {
+              const ops = getOperationsForTopic(t, language);
+              const isActive = currentTopic === t;
+
+              return (
+                <div key={t} className="relative group/topic flex items-center">
+                  <button
+                    onClick={() => handleTopicClick(t)}
+                    disabled={loading}
+                    className={`
+                      px-2.5 py-1 rounded-l transition-colors duration-200 outline-none whitespace-nowrap flex items-center gap-1
+                      ${isActive
+                        ? 'text-mt-main bg-mt-sub/5'
+                        : 'hover:text-mt-text hover:bg-mt-sub/5'}
+                    `}
+                  >
+                    {t === 'Binary Search Tree' ? 'BST' : t}
+                  </button>
+
+                  <div className={`
+                    flex items-center px-1 py-1 rounded-r transition-colors duration-200 bg-mt-sub/5 border-l border-mt-sub/10
+                    ${isActive ? 'text-mt-main' : 'text-mt-sub/40 group-hover/topic:text-mt-sub group-hover/topic:bg-mt-sub/10'}
+                  `}>
+                    <ChevronDown size={10} className="group-hover/topic:scale-110 transition-transform" />
+                    <select
+                      value={isActive ? (subTopic || "") : ""}
+                      onChange={(e) => handleSubTopicChange(t, e.target.value || undefined)}
+                      disabled={loading}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none"
+                    >
+                      <option value="">Random</option>
+                      {ops.map(op => (
+                        <option key={op} value={op}>{op}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Divider */}
         <div className="hidden lg:block w-0.5 h-6 bg-mt-sub/10 rounded-full"></div>
 
-        {/* Right: Subtopic & Language */}
-        <div className="flex items-center gap-4 flex-shrink-0 min-w-[150px] justify-end relative">
-
-          {/* Subtopic Dropdown */}
-          <div className="relative flex items-center group cursor-pointer text-mt-sub hover:text-mt-text transition-colors gap-2 bg-mt-bg/30 px-3 py-1.5 rounded hover:bg-mt-sub/10">
-            {subTopic ? <Hash size={12} className="text-mt-main" /> : <Shuffle size={12} />}
-            <span className="text-right truncate max-w-[120px]">
-              {subTopic || "Random Drill"}
-            </span>
-            <ChevronDown size={12} className="opacity-50" />
-
-            <select
-              value={subTopic || ""}
-              onChange={(e) => setSubTopic(e.target.value || undefined)}
-              disabled={loading}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none"
-            >
-              <option value="">Random Drill</option>
-              {availableOperations.map(op => (
-                <option key={op} value={op}>{op}</option>
-              ))}
-            </select>
-          </div>
-
+        {/* Right: Language */}
+        <div className="flex items-center gap-4 flex-shrink-0 justify-end relative">
           {/* Language Dropdown */}
           <div className="relative flex items-center group cursor-pointer text-mt-sub hover:text-mt-text transition-colors gap-2 bg-mt-bg/30 px-3 py-1.5 rounded hover:bg-mt-sub/10">
             <Code2 size={12} />
@@ -147,7 +151,6 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
           <div className="hidden xl:block opacity-30 text-[10px] bg-mt-bg px-2 py-1 rounded border border-mt-sub/20 cursor-not-allowed" title="Coming Soon">
             Python (Soon)
           </div>
-
         </div>
 
       </div>

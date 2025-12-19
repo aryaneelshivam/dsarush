@@ -6,6 +6,7 @@ import { SettingsBar } from './components/SettingsBar';
 import { Snippet, TestStats, Difficulty, Language } from './types';
 import { DEFAULT_SNIPPETS } from './constants';
 import { Terminal, Github, Keyboard, Command, Loader2 } from 'lucide-react';
+import { Analytics } from "@vercel/analytics/react";
 
 const App: React.FC = () => {
   const [currentSnippet, setCurrentSnippet] = useState<Snippet>(DEFAULT_SNIPPETS[0]);
@@ -62,6 +63,12 @@ const App: React.FC = () => {
   const handleSubTopicChange = (newSubTopic: string | undefined) => {
     setSubTopic(newSubTopic);
     fetchNewSnippet(topic, newSubTopic, difficulty, language);
+  };
+
+  const handleTopicSubTopicChange = (newTopic: string, newSubTopic: string | undefined) => {
+    setTopic(newTopic);
+    setSubTopic(newSubTopic);
+    fetchNewSnippet(newTopic, newSubTopic, difficulty, language);
   };
 
   const handleDifficultyChange = (newDiff: Difficulty) => {
@@ -124,6 +131,7 @@ const App: React.FC = () => {
               setTopic={handleTopicChange}
               subTopic={subTopic}
               setSubTopic={handleSubTopicChange}
+              setTopicSubTopic={handleTopicSubTopicChange}
               difficulty={difficulty}
               setDifficulty={handleDifficultyChange}
               language={language}
@@ -184,6 +192,7 @@ const App: React.FC = () => {
           </a>
         </div>
       </footer>
+      <Analytics />
     </div>
   );
 };
