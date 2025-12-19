@@ -3,10 +3,11 @@ import { generateSnippet } from './services/geminiService';
 import { TypingArea } from './components/TypingArea';
 import { TypingStats } from './components/TypingStats';
 import { SettingsBar } from './components/SettingsBar';
-import { Snippet, TestStats, Difficulty, Language } from './types';
+import { Snippet, TestStats, Difficulty, Language, SessionHistory, Session } from './types';
 import { DEFAULT_SNIPPETS } from './constants';
 import { Terminal, Github, Keyboard, Command, Loader2 } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
+import { storageService } from './services/storageService';
 
 const App: React.FC = () => {
   const [currentSnippet, setCurrentSnippet] = useState<Snippet>(DEFAULT_SNIPPETS[0]);
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.EASY);
   const [language, setLanguage] = useState<Language>('cpp');
 
+  const [history, setHistory] = useState<SessionHistory>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const fetchNewSnippet = useCallback(async (selectedTopic: string, selectedSubTopic: string | undefined, selectedDiff: Difficulty, selectedLang: Language) => {
@@ -40,6 +42,7 @@ const App: React.FC = () => {
   // Initial load
   useEffect(() => {
     fetchNewSnippet(topic, subTopic, difficulty, language);
+    setHistory(storageService.getHistory());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,6 +88,21 @@ const App: React.FC = () => {
 
   const handleTestComplete = (results: TestStats) => {
     setStats(results);
+
+    const session: Session = {
+      id: Math.random().toString(36).substring(2, 9),
+      timestamp: Date.now(),
+      snippetId: currentSnippet.id,
+      topic: currentSnippet.topic,
+      title: currentSnippet.title || currentSnippet.topic,
+      wpm: results.wpm,
+      accuracy: results.accuracy,
+      maxCombo: results.maxCombo,
+      language: currentSnippet.language
+    };
+
+    const newHistory = storageService.saveSession(session);
+    setHistory(newHistory);
   };
 
   const restart = () => {
@@ -162,7 +180,7 @@ const App: React.FC = () => {
             )}
           </>
         ) : (
-          <TypingStats stats={stats} snippet={currentSnippet} onRestart={restart} />
+          <TypingStats stats={stats} snippet={currentSnippet} onRestart={restart} history={history} />
         )}
       </main>
 

@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Snippet, TestStats } from '../types';
+import { Snippet, TestStats, SessionHistory } from '../types';
 import { CodeExplainer } from './CodeExplainer';
-import { CheckCircle, Clock, Type, AlertTriangle, ArrowRight, Loader2, Zap, Share2, Copy, Check, Twitter } from 'lucide-react';
+import { CheckCircle, Clock, Type, AlertTriangle, ArrowRight, Loader2, Zap, Share2, Copy, Check, Twitter, History, BarChart3, TrendingUp as TrendingIcon } from 'lucide-react';
 
 interface TypingStatsProps {
   stats: TestStats;
   snippet: Snippet;
   onRestart: () => void;
+  history: SessionHistory;
 }
 
-export const TypingStats: React.FC<TypingStatsProps> = ({ stats, snippet, onRestart }) => {
+export const TypingStats: React.FC<TypingStatsProps> = ({ stats, snippet, onRestart, history }) => {
   const [stage, setStage] = useState<'compiling' | 'result'>('compiling');
   const [copied, setCopied] = useState(false);
+
+  const isPersonalBest = history.length > 0 && stats.wpm >= Math.max(...history.map(s => s.wpm));
+  const isHighAccuracy = stats.accuracy >= 98;
 
   useEffect(() => {
     // Satisfying delay for "compilation"
@@ -89,30 +93,61 @@ export const TypingStats: React.FC<TypingStatsProps> = ({ stats, snippet, onRest
         </div>
 
         {/* Stats Grid */}
-        <div className="flex flex-wrap justify-center gap-8 md:gap-20 text-mt-sub mt-4 bg-mt-bg border-y border-mt-sub/10 py-8 px-12 w-full max-w-4xl animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <div className="flex flex-col items-center group">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-12 text-mt-sub mt-4 bg-mt-bg border-y border-mt-sub/10 py-8 px-6 md:px-12 w-full max-w-4xl animate-slide-up" style={{ animationDelay: '0.1s' }}>
+
+          {/* WPM */}
+          <div className="flex flex-col items-center group min-w-[100px]">
+            <div className="flex items-center gap-2 text-xs font-bold text-mt-sub/50 uppercase tracking-widest mb-2 group-hover:text-mt-main transition-colors">
+              <TrendingIcon size={14} />
+              <span>WPM</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className={`text-4xl font-mono ${isPersonalBest ? 'text-mt-main' : 'text-mt-text'}`}>
+                {Math.round(stats.wpm)}
+              </span>
+              {isPersonalBest && (
+                <span className="text-[9px] bg-mt-main/10 text-mt-main px-1.5 py-0.5 rounded font-bold mt-1 animate-pulse">
+                  NEW BEST
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Accuracy */}
+          <div className="flex flex-col items-center group min-w-[100px]">
+            <div className="flex items-center gap-2 text-xs font-bold text-mt-sub/50 uppercase tracking-widest mb-2 group-hover:text-mt-func transition-colors">
+              <CheckCircle size={14} />
+              <span>Accuracy</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className={`text-4xl font-mono ${isHighAccuracy ? 'text-mt-func' : 'text-mt-text'}`}>
+                {Math.round(stats.accuracy)}%
+              </span>
+              {isHighAccuracy && (
+                <span className="text-[9px] bg-mt-func/10 text-mt-func px-1.5 py-0.5 rounded font-bold mt-1">
+                  PRECISE
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center group min-w-[100px]">
             <div className="flex items-center gap-2 text-xs font-bold text-mt-sub/50 uppercase tracking-widest mb-2 group-hover:text-mt-main transition-colors">
               <Clock size={14} />
               <span>Time</span>
             </div>
             <span className="text-4xl text-mt-text font-mono">{stats.timeElapsed}<span className="text-lg text-mt-sub/50 ml-1">s</span></span>
           </div>
-          <div className="flex flex-col items-center group">
-            <div className="flex items-center gap-2 text-xs font-bold text-mt-sub/50 uppercase tracking-widest mb-2 group-hover:text-mt-main transition-colors">
-              <Type size={14} />
-              <span>Chars</span>
-            </div>
-            <span className="text-4xl text-mt-text font-mono">{stats.totalChars}</span>
-          </div>
-          {/* Max Combo Stat */}
-          <div className="flex flex-col items-center group">
+
+          <div className="flex flex-col items-center group min-w-[100px]">
             <div className="flex items-center gap-2 text-xs font-bold text-mt-sub/50 uppercase tracking-widest mb-2 group-hover:text-mt-main transition-colors">
               <Zap size={14} />
               <span>Max Combo</span>
             </div>
             <span className="text-4xl text-mt-main font-mono">{stats.maxCombo}</span>
           </div>
-          <div className="flex flex-col items-center group">
+
+          <div className="flex flex-col items-center group min-w-[100px]">
             <div className="flex items-center gap-2 text-xs font-bold text-mt-sub/50 uppercase tracking-widest mb-2 group-hover:text-mt-main transition-colors">
               <AlertTriangle size={14} />
               <span>Errors</span>
@@ -151,6 +186,83 @@ export const TypingStats: React.FC<TypingStatsProps> = ({ stats, snippet, onRest
                 </span>
               )}
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Persistence & History (Recent Attempts) */}
+      <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up" style={{ animationDelay: '0.25s' }}>
+        {/* All-time Summary Card */}
+        <div className="bg-mt-sub/5 rounded-xl p-6 border border-mt-sub/10 flex flex-col gap-4">
+          <div className="flex items-center gap-2 text-mt-sub font-bold text-xs uppercase tracking-wider">
+            <BarChart3 size={14} className="text-mt-main" />
+            <span>Overview</span>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-mt-sub/50 text-[10px] uppercase">Avg WPM</div>
+              <div className="text-xl font-mono text-mt-text">
+                {history.length > 0 ? Math.round(history.reduce((a, b) => a + b.wpm, 0) / history.length) : '-'}
+              </div>
+            </div>
+            <div>
+              <div className="text-mt-sub/50 text-[10px] uppercase">Best WPM</div>
+              <div className="text-xl font-mono text-mt-func">
+                {history.length > 0 ? Math.round(Math.max(...history.map(s => s.wpm))) : '-'}
+              </div>
+            </div>
+            <div>
+              <div className="text-mt-sub/50 text-[10px] uppercase">Avg Acc</div>
+              <div className="text-xl font-mono text-mt-text">
+                {history.length > 0 ? Math.round(history.reduce((a, b) => a + b.accuracy, 0) / history.length) : '-'}%
+              </div>
+            </div>
+            <div>
+              <div className="text-mt-sub/50 text-[10px] uppercase">Sessions</div>
+              <div className="text-xl font-mono text-mt-text">{history.length}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Attempts List */}
+        <div className="md:col-span-2 bg-mt-sub/5 rounded-xl p-6 border border-mt-sub/10 flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-mt-sub font-bold text-xs uppercase tracking-wider">
+              <History size={14} className="text-mt-main" />
+              <span>Recent Activity</span>
+            </div>
+            <div className="text-[10px] text-mt-sub/30 font-mono">Last {Math.min(history.length, 5)} attempts</div>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            {history.length > 0 ? (
+              history.slice(0, 5).map((session, idx) => (
+                <div key={session.id} className="flex items-center justify-between py-2 border-b border-mt-sub/5 last:border-0 hover:bg-mt-sub/5 px-2 rounded transition-colors group">
+                  <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-mt-sub/20 group-hover:bg-mt-main transition-colors"></div>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-mt-text font-medium truncate max-w-[150px] md:max-w-xs">{session.title}</span>
+                      <span className="text-[10px] text-mt-sub/40 uppercase">{session.topic} • {session.language}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="flex flex-col items-end">
+                      <span className="text-sm font-mono text-mt-text leading-none">{Math.round(session.wpm)}</span>
+                      <span className="text-[9px] text-mt-sub/40 uppercase leading-none mt-1">wpm</span>
+                    </div>
+                    <div className="flex flex-col items-end w-12">
+                      <span className="text-sm font-mono text-mt-text leading-none">{Math.round(session.accuracy)}%</span>
+                      <span className="text-[9px] text-mt-sub/40 uppercase leading-none mt-1">acc</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="py-8 flex flex-col items-center justify-center text-mt-sub/30 gap-2">
+                <History size={24} strokeWidth={1} />
+                <span className="text-xs">No history yet</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

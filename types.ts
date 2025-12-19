@@ -34,3 +34,17 @@ export interface GenerationConfig {
   topic: string;
   difficulty: Difficulty;
 }
+
+export interface Session {
+  id: string;
+  timestamp: number;
+  snippetId: string;
+  topic: string;
+  title: string;
+  wpm: number;
+  accuracy: number;
+  maxCombo: number;
+  language: Language;
+}
+
+export type SessionHistory = Session[];
