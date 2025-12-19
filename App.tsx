@@ -96,8 +96,8 @@ const App: React.FC = () => {
       {/* Header */}
       <header className="w-full max-w-6xl flex justify-between items-end mb-6">
         <div className="flex items-center gap-4">
-          <div className="bg-mt-text text-mt-bg p-2 rounded-lg">
-            <Terminal size={32} />
+          <div className="p-1">
+            <img src="/rushlogo.png" alt="DSArush Logo" className="w-12 h-12 object-contain" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-mt-text leading-none">DSArush</h1>
