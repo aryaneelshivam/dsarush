@@ -1,6 +1,6 @@
 # DSArush ⚡
 
-Master Data Structures and Algorithms with speed and precision. **DSArush** is a Monkeytype-inspired speed-typing practice tool specifically designed for developers to internalize DSA patterns and syntax.
+Master Data Structures and Algorithms with speed and precision. **DSArush** is a Monkeytype-inspired speed-typing practice tool specifically designed for developers to internalize DSA patterns and syntax. Try it live at [dsarush.vercel.app](https://dsarush.vercel.app).
 
 ![DSArush Hero](index.html) <!-- Placeholder for a real screenshot if available -->
 
