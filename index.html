@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSArush - DSA Typing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              mt: {
+                bg: '#323437',
+                main: '#e2b714',
+                caret: '#e2b714',
+                sub: '#646669',
+                text: '#d1d0c5',
+                error: '#ca4754',
+                errorExtra: '#7e2a33',
+                // Syntax Highlighting (One Dark / Zen inspired)
+                kwd: '#ff79c6', // Pink (Keywords)
+                type: '#8be9fd', // Cyan (Types)
+                func: '#50fa7b', // Green (Functions)
+                str: '#f1fa8c', // Yellow (Strings)
+                val: '#bd93f9', // Purple (Numbers/Bools)
+                oper: '#d1d0c5' // Default Text
+              }
+            },
+            fontFamily: {
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'slide-up': 'slideUp 0.5s ease-out forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #323437;
+        color: #d1d0c5;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      /* Hide scrollbar for zen feel */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
