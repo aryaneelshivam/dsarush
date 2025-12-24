@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Difficulty, Language } from '../types';
 import { TOPICS, getOperationsForTopic } from '../constants';
-import { Feather, TrendingUp, Flame, LayoutList, ChevronDown, Shuffle, Hash, Code2 } from 'lucide-react';
+import { Feather, TrendingUp, Flame, LayoutList, ChevronDown, Shuffle, Hash, Code2, Keyboard } from 'lucide-react';
 
 interface SettingsBarProps {
   currentTopic: string;
@@ -13,6 +13,8 @@ interface SettingsBarProps {
   setDifficulty: (d: Difficulty) => void;
   language: Language;
   setLanguage: (l: Language) => void;
+  mode: 'typing' | 'jumbled';
+  setMode: (m: 'typing' | 'jumbled') => void;
   loading: boolean;
 }
 
@@ -26,6 +28,8 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
   setDifficulty,
   language,
   setLanguage,
+  mode,
+  setMode,
   loading
 }) => {
 
@@ -52,8 +56,8 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
     <div className="w-full max-w-6xl mb-8 animate-fade-in">
       <div className="flex flex-col lg:flex-row items-center justify-between bg-mt-sub/5 rounded-lg px-6 py-3 gap-6 lg:gap-8 text-xs font-mono text-mt-sub select-none shadow-sm border border-mt-sub/5">
 
-        {/* Left: Difficulty */}
-        <div className="flex items-center gap-4 flex-shrink-0">
+        {/* Left: Difficulty & Mode */}
+        <div className="flex items-center gap-6 flex-shrink-0">
           <div className="flex gap-1 bg-mt-bg/50 rounded p-1">
             {Object.values(Difficulty).map(d => (
               <button
@@ -71,6 +75,37 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
                 <span>{d}</span>
               </button>
             ))}
+          </div>
+
+          <div className="h-4 w-px bg-mt-sub/10"></div>
+
+          <div className="flex gap-1 bg-mt-bg/50 rounded p-1">
+            <button
+              onClick={() => setMode('typing')}
+              disabled={loading}
+              className={`
+                px-3 py-1.5 rounded transition-all duration-200 outline-none flex items-center gap-2
+                ${mode === 'typing'
+                  ? 'text-mt-main bg-mt-sub/10 font-bold'
+                  : 'hover:text-mt-text hover:bg-mt-sub/5'}
+              `}
+            >
+              <Keyboard size={14} />
+              <span>Typing</span>
+            </button>
+            <button
+              onClick={() => setMode('jumbled')}
+              disabled={loading}
+              className={`
+                px-3 py-1.5 rounded transition-all duration-200 outline-none flex items-center gap-2
+                ${mode === 'jumbled'
+                  ? 'text-mt-main bg-mt-sub/10 font-bold'
+                  : 'hover:text-mt-text hover:bg-mt-sub/5'}
+              `}
+            >
+              <Shuffle size={14} />
+              <span>Jumbled</span>
+            </button>
           </div>
         </div>
 

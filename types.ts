@@ -6,6 +6,8 @@ export enum Difficulty {
 
 export type Language = 'cpp' | 'java' | 'python';
 
+export type GameMode = 'typing' | 'jumbled';
+
 export interface Explanation {
   line: number; // 1-based line number relative to the snippet
   text: string;

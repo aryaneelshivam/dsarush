@@ -472,141 +472,221 @@ export const DEFAULT_SNIPPETS: Snippet[] = [
     },
 
     // --- STACK (C++) ---
+    // Stack using Array
     {
-        id: 'stack-array',
+        id: 'stack-array-push',
         topic: 'Stack',
-        title: 'Stack using Array',
-        difficulty: Difficulty.MEDIUM,
+        title: 'Stack Array Push',
+        difficulty: Difficulty.EASY,
         language: 'cpp',
-        code: `#include <iostream>
-#include <stack>
-using namespace std;
-
-class Stack{
-    int arr[5]; //static array of size 5
-    int top;
-
-    public:
-    Stack(){ 
-        top = -1; //initial index of top is -1
+        code: `void push(int arr[], int& top, int x) {
+    if(top == 4) {
+        cout << "Stack Overflow" << endl;
+        return;
     }
-
-    void push(int x){ //pushes a new element into the stack
-        if(top == 4){
-            cout << "stack overflow";
-            return;
-        } else {
-            top++;
-            arr[top] = x;
-        }
-    }  
-
-    bool isempty(){ //checks if the stack is empty
-        if(top == -1){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    void pop(){ //pops the top element from the stack
-        if(isempty()){ 
-            cout << "stack underflow" << endl;
-            return;
-        } else {
-            top--;
-        }
-    }
-
-    int peek(){ //returns the top element of the stack
-        if(isempty()){
-            cout << "stack is empty" << endl;
-            return -1;
-        } else {
-            return arr[top];
-        }
-    }
-};`
+    top++;
+    arr[top] = x;
+}`
     },
     {
-        id: 'stack-linked-list',
+        id: 'stack-array-pop',
         topic: 'Stack',
-        title: 'Stack using Linked List',
-        difficulty: Difficulty.MEDIUM,
+        title: 'Stack Array Pop',
+        difficulty: Difficulty.EASY,
         language: 'cpp',
-        code: `class Stack{
-    Node* top; 
-    public:
-    Stack(){
-        top = NULL; 
+        code: `void pop(int& top) {
+    if(top == -1) {
+        cout << "Stack Underflow" << endl;
+        return;
     }
+    top--;
+}`
+    },
+    {
+        id: 'stack-array-peek',
+        topic: 'Stack',
+        title: 'Stack Array Top',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `int peek(int arr[], int top) {
+    if(top == -1) {
+        cout << "Stack is empty" << endl;
+        return -1;
+    }
+    return arr[top];
+}`
+    },
+    {
+        id: 'stack-array-empty',
+        topic: 'Stack',
+        title: 'Stack Array Safe Empty',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `bool isEmpty(int top) {
+    return top == -1;
+}`
+    },
 
-    void push(int data){ 
-        Node* newnode = new Node();
-        newnode->data = data;
-        newnode->next = top;
-        top = newnode;
+    // Stack using Linked List
+    {
+        id: 'stack-ll-push',
+        topic: 'Stack',
+        title: 'Stack LL Push',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `void push(Node*& top, int data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->next = top;
+    top = newNode;
+}`
+    },
+    {
+        id: 'stack-ll-pop',
+        topic: 'Stack',
+        title: 'Stack LL Pop',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `void pop(Node*& top) {
+    if(top == NULL) {
+        cout << "Stack Underflow" << endl;
+        return;
     }
-
-    void pop(){ 
-        if(top == NULL){
-            cout << "Stack is empty" << endl;
-            return;
-        } else {
-            Node* temp = top;
-            top = temp->next;
-            delete temp;
-        }
+    Node* temp = top;
+    top = top->next;
+    delete temp;
+}`
+    },
+    {
+        id: 'stack-ll-peek',
+        topic: 'Stack',
+        title: 'Stack LL Top',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `int peek(Node* top) {
+    if(top == NULL) {
+        cout << "Stack is empty" << endl;
+        return -1;
     }
-
-    bool isempty(){ 
-        if(top == NULL) return true;
-        else return false;
-    }
-};`
+    return top->data;
+}`
+    },
+    {
+        id: 'stack-ll-empty',
+        topic: 'Stack',
+        title: 'Stack LL IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `bool isEmpty(Node* top) {
+    return top == NULL;
+}`
     },
 
     // --- QUEUE (C++) ---
     {
-        id: 'queue-array',
+        id: 'queue-array-enqueue',
         topic: 'Queue',
-        title: 'Queue using Array',
-        difficulty: Difficulty.MEDIUM,
+        title: 'Queue Array Enqueue',
+        difficulty: Difficulty.EASY,
         language: 'cpp',
-        code: `class Queue {
-    int* arr;
-    int front, back;
-
-    public:
-    Queue() {
-        arr = new int[100];
-        front = -1;
-        back = -1;
+        code: `void enqueue(int arr[], int& back, int x) {
+    if (back == 99) {
+        cout << "Queue Overflow" << endl;
+        return;
     }
-
-    void push(int x) {
-        if (back == 99) {
-            cout << "Queue Overflow" << endl;
-            return;
-        }
-        back++;
-        arr[back] = x;
-        if (front == -1) front++;
+    back++;
+    arr[back] = x;
+}`
+    },
+    {
+        id: 'queue-array-dequeue',
+        topic: 'Queue',
+        title: 'Queue Array Dequeue',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `void dequeue(int& front, int back) {
+    if (front > back) {
+        cout << "Queue Underflow" << endl;
+        return;
     }
+    front++;
+}`
+    },
+    {
+        id: 'queue-array-front',
+        topic: 'Queue',
+        title: 'Queue Array Front',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `int getFront(int arr[], int front, int back) {
+    if (front > back) return -1;
+    return arr[front];
+}`
+    },
+    {
+        id: 'queue-array-empty',
+        topic: 'Queue',
+        title: 'Queue Array IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `bool isEmpty(int front, int back) {
+    return front > back;
+}`
+    },
 
-    void pop() {
-        if (front == -1 || front > back) {
-            cout << "No elements" << endl;
-            return;
-        }
-        front++;
+    // Queue using Linked List
+    {
+        id: 'queue-ll-enqueue',
+        topic: 'Queue',
+        title: 'Queue LL Enqueue',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `void enqueue(Node*& front, Node*& back, int x) {
+    Node* newNode = new Node();
+    newNode->data = x;
+    newNode->next = NULL;
+    if (back == NULL) {
+        front = back = newNode;
+        return;
     }
-
-    int peek() {
-        if (front == -1 || front > back) return -1;
-        return arr[front];
-    }
-};`
+    back->next = newNode;
+    back = newNode;
+}`
+    },
+    {
+        id: 'queue-ll-dequeue',
+        topic: 'Queue',
+        title: 'Queue LL Dequeue',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `void dequeue(Node*& front, Node*& back) {
+    if (front == NULL) return;
+    Node* temp = front;
+    front = front->next;
+    if (front == NULL) back = NULL;
+    delete temp;
+}`
+    },
+    {
+        id: 'queue-ll-front',
+        topic: 'Queue',
+        title: 'Queue LL Front',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `int getFront(Node* front) {
+    if (front == NULL) return -1;
+    return front->data;
+}`
+    },
+    {
+        id: 'queue-ll-empty',
+        topic: 'Queue',
+        title: 'Queue LL IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `bool isEmpty(Node* front) {
+    return front == NULL;
+}`
     },
 
     // --- BINARY SEARCH TREE (C++) ---
@@ -783,6 +863,205 @@ Node* deleteNode(Node* root, int key) {
     }
 }`
     },
+    {
+        id: 'graph-adj-list',
+        topic: 'Graph',
+        title: 'Adjacency List',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `void addEdge(vector < int > adj[], int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u); // Remove for directed graph
+    }`
+    },
+    {
+        id: 'graph-dfs',
+        topic: 'Graph',
+        title: 'DFS Traversal',
+        difficulty: Difficulty.MEDIUM,
+        language: 'cpp',
+        code: `void dfsRecursive(int curr, vector < int > adj[], bool visited[]) {
+        visited[curr] = true;
+        cout << curr << " ";
+
+for (int neighbor : adj[curr]) {
+    if (!visited[neighbor]) {
+        dfsRecursive(neighbor, adj, visited);
+    }
+}
+}
+
+void dfs(int startNode, vector < int > adj[], int V) {
+    bool visited[V];
+    for (int i = 0; i < V; i++) visited[i] = false;
+    dfsRecursive(startNode, adj, visited);
+} `
+    },
+    {
+        id: 'merge-sort',
+        topic: 'Merge Sort',
+        title: 'Merge Sort Recursive',
+        difficulty: Difficulty.MEDIUM,
+        language: 'cpp',
+        code: `void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[n1], R[n2];
+    for (int i = 0; i < n1; i++) L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}
+
+void mergeSort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}`
+    },
+    {
+        id: 'quick-sort',
+        topic: 'Quick Sort',
+        title: 'Quick Sort Recursive',
+        difficulty: Difficulty.MEDIUM,
+        language: 'cpp',
+        code: `int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = (low - 1);
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}`
+    },
+    {
+        id: 'heap-ops',
+        topic: 'Heap',
+        title: 'Max Heap Operations',
+        difficulty: Difficulty.MEDIUM,
+        language: 'cpp',
+        code: `void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+    if (l < n && arr[l] > arr[largest]) largest = l;
+    if (r < n && arr[r] > arr[largest]) largest = r;
+    if (largest != i) {
+        swap(arr[i], arr[largest]);
+        heapify(arr, n, largest);
+    }
+}
+
+void insertNode(int arr[], int& n, int Key) {
+    n = n + 1;
+    arr[n - 1] = Key;
+    int i = n - 1;
+    while (i > 0 && arr[(i - 1) / 2] < arr[i]) {
+        swap(arr[i], arr[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+
+void deleteRoot(int arr[], int& n) {
+    int lastElement = arr[n - 1];
+    arr[0] = lastElement;
+    n = n - 1;
+    heapify(arr, n, 0);
+}`
+    },
+    {
+        id: 'min-heap-ops',
+        topic: 'Heap',
+        title: 'Min Heap Operations',
+        difficulty: Difficulty.MEDIUM,
+        language: 'cpp',
+        code: `void minHeapify(int arr[], int n, int i) {
+    int smallest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+    if (l < n && arr[l] < arr[smallest]) smallest = l;
+    if (r < n && arr[r] < arr[smallest]) smallest = r;
+    if (smallest != i) {
+        swap(arr[i], arr[smallest]);
+        minHeapify(arr, n, smallest);
+    }
+}
+
+void insertNode(int arr[], int& n, int Key) {
+    n = n + 1;
+    arr[n - 1] = Key;
+    int i = n - 1;
+    while (i > 0 && arr[(i - 1) / 2] > arr[i]) {
+        swap(arr[i], arr[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+
+void deleteRoot(int arr[], int& n) {
+    int lastElement = arr[n - 1];
+    arr[0] = lastElement;
+    n = n - 1;
+    minHeapify(arr, n, 0);
+}`
+    },
+    {
+        id: 'trie-ops',
+        topic: 'Trie',
+        title: 'Trie Operations',
+        difficulty: Difficulty.HARD,
+        language: 'cpp',
+        code: `struct TrieNode {
+    struct TrieNode *children[26];
+    bool isEndOfWord;
+};
+
+struct TrieNode *getNode(void) {
+    struct TrieNode *pNode =  new TrieNode;
+    pNode->isEndOfWord = false;
+    for (int i = 0; i < 26; i++) pNode->children[i] = NULL;
+    return pNode;
+}
+
+void insert(struct TrieNode *root, string key) {
+    struct TrieNode *pCrawl = root;
+    for (int i = 0; i < key.length(); i++) {
+        int index = key[i] - 'a';
+        if (!pCrawl->children[index]) pCrawl->children[index] = getNode();
+        pCrawl = pCrawl->children[index];
+    }
+    pCrawl->isEndOfWord = true;
+}
+
+bool search(struct TrieNode *root, string key) {
+    struct TrieNode *pCrawl = root;
+    for (int i = 0; i < key.length(); i++) {
+        int index = key[i] - 'a';
+        if (!pCrawl->children[index]) return false;
+        pCrawl = pCrawl->children[index];
+    }
+    return (pCrawl != NULL && pCrawl->isEndOfWord);
+}`
+    },
 
     // ================= JAVA SNIPPETS =================
 
@@ -799,7 +1078,7 @@ Node* deleteNode(Node* root, int key) {
     }
     arr[pos] = x;
     return n + 1;
-}`,
+} `,
         explanations: [
             { line: 1, text: "Methods takes array, current size n, pos and value x. Returns new size." },
             { line: 2, text: "Shift elements to the right to make space." }
@@ -816,7 +1095,7 @@ Node* deleteNode(Node* root, int key) {
         arr[i] = arr[i + 1];
     }
     return n - 1;
-}`,
+} `,
         explanations: [
             { line: 1, text: "Shifts elements left to cover the deleted index." },
             { line: 4, text: "Returns the new size of the array." }
@@ -833,7 +1112,7 @@ Node* deleteNode(Node* root, int key) {
         if (arr[i] == x) return i;
     }
     return -1;
-}`
+} `
     },
     {
         id: 'array-binary-search-java',
@@ -849,7 +1128,7 @@ Node* deleteNode(Node* root, int key) {
         else r = m - 1;
     }
     return -1;
-}`
+} `
     },
     {
         id: 'array-reverse-java',
@@ -865,7 +1144,7 @@ Node* deleteNode(Node* root, int key) {
         start++;
         end--;
     }
-}`
+} `
     },
     {
         id: 'array-bubble-sort-java',
@@ -883,7 +1162,7 @@ Node* deleteNode(Node* root, int key) {
             }
         }
     }
-}`
+} `
     },
 
     // --- LINKED LIST (Java) ---
@@ -901,7 +1180,7 @@ Node* deleteNode(Node* root, int key) {
         data = d;
         next = null;
     }
-}`,
+} `,
         explanations: [
             { line: 1, text: "Standard Java Class definition for a Node." },
             { line: 3, text: "Reference to the next Node object (initialized to null)." }
@@ -924,7 +1203,7 @@ Node* deleteNode(Node* root, int key) {
     }
     temp.next = newNode;
     return head;
-}`
+} `
     },
     {
         id: 'll-insert-begin-java',
@@ -936,7 +1215,7 @@ Node* deleteNode(Node* root, int key) {
     Node newNode = new Node(data);
     newNode.next = head;
     return newNode;
-}`
+} `
     },
     {
         id: 'll-delete-java',
@@ -956,7 +1235,7 @@ Node* deleteNode(Node* root, int key) {
     if (temp == null) return head;
     prev.next = temp.next;
     return head;
-}`
+} `
     },
     {
         id: 'll-reverse-java',
@@ -975,7 +1254,7 @@ Node* deleteNode(Node* root, int key) {
         current = next;
     }
     return prev;
-}`
+} `
     },
     {
         id: 'll-detect-loop-java',
@@ -993,50 +1272,116 @@ Node* deleteNode(Node* root, int key) {
         }
     }
     return false;
-}`
+} `
     },
 
     // --- STACK (Java) ---
+    // Stack using Array
     {
-        id: 'stack-array-java',
+        id: 'stack-array-push-java',
         topic: 'Stack',
-        title: 'Stack using Array',
-        difficulty: Difficulty.MEDIUM,
+        title: 'Stack Array Push',
+        difficulty: Difficulty.EASY,
         language: 'java',
-        code: `class Stack {
-    static final int MAX = 1000;
-    int top;
-    int a[] = new int[MAX];
-
-    Stack() {
-        top = -1;
+        code: `public boolean push(int[] a, int top, int x) {
+    if (top >= (MAX - 1)) {
+        System.out.println("Stack Overflow");
+        return false;
+    } else {
+        a[++top] = x;
+        return true;
     }
-
-    boolean push(int x) {
-        if (top >= (MAX - 1)) {
-            System.out.println("Stack Overflow");
-            return false;
-        } else {
-            a[++top] = x;
-            return true;
-        }
+} `
+    },
+    {
+        id: 'stack-array-pop-java',
+        topic: 'Stack',
+        title: 'Stack Array Pop',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public int pop(int[] a, int top) {
+    if (top < 0) {
+        System.out.println("Stack Underflow");
+        return 0;
+    } else {
+        int x = a[top--];
+        return x;
     }
+} `
+    },
+    {
+        id: 'stack-array-peek-java',
+        topic: 'Stack',
+        title: 'Stack Array Peek',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public int peek(int[] a, int top) {
+    if (top < 0) return -1;
+    return a[top];
+} `
+    },
+    {
+        id: 'stack-array-empty-java',
+        topic: 'Stack',
+        title: 'Stack Array IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public boolean isEmpty(int top) {
+    return (top < 0);
+} `
+    },
 
-    int pop() {
-        if (top < 0) {
-            System.out.println("Stack Underflow");
-            return 0;
-        } else {
-            int x = a[top--];
-            return x;
-        }
+    // Stack using Linked List
+    {
+        id: 'stack-ll-push-java',
+        topic: 'Stack',
+        title: 'Stack LL Push',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public void push(Node top, int x) {
+    Node temp = new Node(x);
+    temp.next = top;
+    top = temp;
+} `
+    },
+    {
+        id: 'stack-ll-pop-java',
+        topic: 'Stack',
+        title: 'Stack LL Pop',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public void pop(Node top) {
+    if (top == null) {
+        System.out.print("Stack Underflow");
+        return;
     }
-
-    int peek() {
-        if (top < 0) return -1;
-        return a[top];
+    top = (top).next;
+} `
+    },
+    {
+        id: 'stack-ll-peek-java',
+        topic: 'Stack',
+        title: 'Stack LL Peek',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public int peek(Node top) {
+    if (!isEmpty(top)) {
+        return top.data;
+    } else {
+        System.out.println("Stack is empty");
+        return -1;
     }
-}`
+} `
+    },
+    {
+        id: 'stack-ll-empty-java',
+        topic: 'Stack',
+        title: 'Stack LL IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public boolean isEmpty(Node top) {
+    return top == null;
+} `
     },
 
     // --- QUEUE (Java) ---
@@ -1080,6 +1425,249 @@ class Queue {
     }
 }`
     },
+    {
+        id: 'queue-array-enqueue-java',
+        topic: 'Queue',
+        title: 'Queue Array Enqueue',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public void enqueue(int[] arr, int rear, int x, int MAX) {
+    if (rear == MAX - 1) {
+        System.out.println("Queue Overflow");
+        return;
+    }
+    arr[++rear] = x;
+} `
+    },
+    {
+        id: 'queue-array-dequeue-java',
+        topic: 'Queue',
+        title: 'Queue Array Dequeue',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public int dequeue(int[] arr, int front, int rear) {
+    if (front > rear) {
+        System.out.println("Queue Underflow");
+        return -1;
+    }
+    return arr[front++];
+} `
+    },
+    {
+        id: 'queue-array-front-java',
+        topic: 'Queue',
+        title: 'Queue Array Front',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public int getFront(int[] arr, int front, int rear) {
+    if (front > rear) return -1;
+    return arr[front];
+} `
+    },
+    {
+        id: 'queue-array-empty-java',
+        topic: 'Queue',
+        title: 'Queue Array IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public boolean isEmpty(int front, int rear) {
+    return front > rear;
+} `
+    },
+    {
+        id: 'queue-ll-enqueue-java',
+        topic: 'Queue',
+        title: 'Queue LL Enqueue',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public void enqueue(Node front, Node rear, int data) {
+    Node newNode = new Node(data);
+    if (rear == null) {
+        front = rear = newNode;
+        return;
+    }
+    rear.next = newNode;
+    rear = newNode;
+} `
+    },
+    {
+        id: 'queue-ll-dequeue-java',
+        topic: 'Queue',
+        title: 'Queue LL Dequeue',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public void dequeue(Node front, Node rear) {
+    if (front == null) return;
+    Node temp = front;
+    front = front.next;
+    if (front == null) rear = null;
+} `
+    },
+    {
+        id: 'queue-ll-front-java',
+        topic: 'Queue',
+        title: 'Queue LL Front',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public int getFront(Node front) {
+    if (front == null) return -1;
+    return front.data;
+} `
+    },
+    {
+        id: 'queue-ll-empty-java',
+        topic: 'Queue',
+        title: 'Queue LL IsEmpty',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public boolean isEmpty(Node front) {
+    return front == null;
+} `
+    },
+
+    // --- SORTING (Java) ---
+    {
+        id: 'merge-sort-java',
+        topic: 'Merge Sort',
+        title: 'Merge Sort Recursive',
+        difficulty: Difficulty.MEDIUM,
+        language: 'java',
+        code: `public void merge(int arr[], int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    int L[] = new int[n1];
+    int R[] = new int[n2];
+    for (int i = 0; i < n1; ++i) L[i] = arr[l + i];
+    for (int j = 0; j < n2; ++j) R[j] = arr[m + 1 + j];
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) arr[k++] = L[i++];
+        else arr[k++] = R[j++];
+    }
+    while (i < n1) arr[k++] = L[i++];
+    while (j < n2) arr[k++] = R[j++];
+}
+
+public void sort(int arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        sort(arr, l, m);
+        sort(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}`
+    },
+    {
+        id: 'quick-sort-java',
+        topic: 'Quick Sort',
+        title: 'Quick Sort Recursive',
+        difficulty: Difficulty.MEDIUM,
+        language: 'java',
+        code: `public int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = (low - 1);
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    int temp = arr[i + 1];
+    arr[i + 1] = arr[high];
+    arr[high] = temp;
+    return i + 1;
+}
+
+public void sort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        sort(arr, low, pi - 1);
+        sort(arr, pi + 1, high);
+    }
+}`
+    },
+
+    // --- HEAP (Java) ---
+    {
+        id: 'heap-ops-java',
+        topic: 'Heap',
+        title: 'Max Heap Operations',
+        difficulty: Difficulty.MEDIUM,
+        language: 'java',
+        code: `public void heapify(int arr[], int n, int i) {
+    int largest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+    if (l < n && arr[l] > arr[largest]) largest = l;
+    if (r < n && arr[r] > arr[largest]) largest = r;
+    if (largest != i) {
+        int swap = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = swap;
+        heapify(arr, n, largest);
+    }
+}
+
+public void insert(int arr[], int n, int key) {
+    n = n + 1;
+    arr[n - 1] = key;
+    int i = n - 1;
+    while (i > 0 && arr[(i - 1) / 2] < arr[i]) {
+        int swap = arr[i];
+        arr[i] = arr[(i - 1) / 2];
+        arr[(i - 1) / 2] = swap;
+        i = (i - 1) / 2;
+    }
+}
+
+public void deleteRoot(int arr[], int n) {
+    int lastElement = arr[n - 1];
+    arr[0] = lastElement;
+    n = n - 1;
+    heapify(arr, n, 0);
+}`
+    },
+    {
+        id: 'min-heap-ops-java',
+        topic: 'Heap',
+        title: 'Min Heap Operations',
+        difficulty: Difficulty.MEDIUM,
+        language: 'java',
+        code: `public void minHeapify(int arr[], int n, int i) {
+    int smallest = i;
+    int l = 2 * i + 1;
+    int r = 2 * i + 2;
+    if (l < n && arr[l] < arr[smallest]) smallest = l;
+    if (r < n && arr[r] < arr[smallest]) smallest = r;
+    if (smallest != i) {
+        int swap = arr[i];
+        arr[i] = arr[smallest];
+        arr[smallest] = swap;
+        minHeapify(arr, n, smallest);
+    }
+}
+
+public void insert(int arr[], int n, int key) {
+    n = n + 1;
+    arr[n - 1] = key;
+    int i = n - 1;
+    while (i > 0 && arr[(i - 1) / 2] > arr[i]) {
+        int swap = arr[i];
+        arr[i] = arr[(i - 1) / 2];
+        arr[(i - 1) / 2] = swap;
+        i = (i - 1) / 2;
+    }
+}
+
+public void deleteRoot(int arr[], int n) {
+    int lastElement = arr[n - 1];
+    arr[0] = lastElement;
+    n = n - 1;
+    minHeapify(arr, n, 0);
+}`
+    },
 
     // --- BST (Java) ---
     {
@@ -1098,7 +1686,7 @@ class Queue {
     else if (key > root.key)
         root.right = insert(root.right, key);
     return root;
-}`
+} `
     },
     {
         id: 'bst-inorder-java',
@@ -1111,7 +1699,7 @@ class Queue {
     inorder(root.left);
     System.out.print(root.key + " ");
     inorder(root.right);
-}`
+} `
     },
 
     {
@@ -1128,7 +1716,7 @@ class Queue {
         key = item;
         left = right = null;
     }
-}`
+} `
     },
     {
         id: 'bst-search-java',
@@ -1142,7 +1730,7 @@ class Queue {
     if (root.key < key)
         return search(root.right, key);
     return search(root.left, key);
-}`
+} `
     },
     {
         id: 'bst-preorder-java',
@@ -1155,7 +1743,7 @@ class Queue {
     System.out.print(root.key + " ");
     preorder(root.left);
     preorder(root.right);
-}`
+} `
     },
     {
         id: 'bst-postorder-java',
@@ -1168,7 +1756,7 @@ class Queue {
     postorder(root.left);
     postorder(root.right);
     System.out.print(root.key + " ");
-}`
+} `
     },
 
     {
@@ -1200,7 +1788,7 @@ public Node deleteNode(Node root, int key) {
         root.right = deleteNode(root.right, temp.key);
     }
     return root;
-}`
+} `
     },
     {
         id: 'bst-levelorder-java',
@@ -1210,7 +1798,7 @@ public Node deleteNode(Node root, int key) {
         language: 'java',
         code: `public void levelOrder(Node root) {
     if (root == null) return;
-    Queue<Node> queue = new LinkedList<>();
+    Queue < Node > queue = new LinkedList<>();
     queue.add(root);
     while (!queue.isEmpty()) {
         Node tempNode = queue.poll();
@@ -1222,7 +1810,42 @@ public Node deleteNode(Node root, int key) {
             queue.add(tempNode.right);
         }
     }
-}`
+} `
+    },
+
+    // --- TRIE (Java) ---
+    {
+        id: 'trie-ops-java',
+        topic: 'Trie',
+        title: 'Trie Operations',
+        difficulty: Difficulty.HARD,
+        language: 'java',
+        code: `class TrieNode {
+    TrieNode[] children = new TrieNode[26];
+    boolean isEndOfWord;
+}
+
+public void insert(TrieNode root, String key) {
+    TrieNode pCrawl = root;
+    for (int i = 0; i < key.length(); i++) {
+        int index = key.charAt(i) - 'a';
+        if (pCrawl.children[index] == null)
+            pCrawl.children[index] = new TrieNode();
+        pCrawl = pCrawl.children[index];
+    }
+    pCrawl.isEndOfWord = true;
+}
+
+public boolean search(TrieNode root, String key) {
+    TrieNode pCrawl = root;
+    for (int i = 0; i < key.length(); i++) {
+        int index = key.charAt(i) - 'a';
+        if (pCrawl.children[index] == null)
+            return false;
+        pCrawl = pCrawl.children[index];
+    }
+    return (pCrawl != null && pCrawl.isEndOfWord);
+} `
     },
 
     // --- GRAPH (Java) ---
@@ -1232,9 +1855,9 @@ public Node deleteNode(Node root, int key) {
         title: 'BFS Traversal',
         difficulty: Difficulty.MEDIUM,
         language: 'java',
-        code: `public void bfs(int startNode, ArrayList<ArrayList<Integer>> adj, int V) {
+        code: `public void bfs(int startNode, ArrayList < ArrayList < Integer >> adj, int V) {
     boolean visited[] = new boolean[V];
-    LinkedList<Integer> queue = new LinkedList<Integer>();
+    LinkedList < Integer > queue = new LinkedList<Integer>();
 
     visited[startNode] = true;
     queue.add(startNode);
@@ -1250,7 +1873,7 @@ public Node deleteNode(Node root, int key) {
             }
         }
     }
-}`,
+} `,
         explanations: [
             { line: 1, text: "Uses ArrayList of ArrayLists for adjacency list representation." },
             { line: 3, text: "LinkedList implements Queue interface in Java." },
@@ -1263,14 +1886,25 @@ public Node deleteNode(Node root, int key) {
         title: 'DFS Recursive',
         difficulty: Difficulty.MEDIUM,
         language: 'java',
-        code: `public void dfs(int v, boolean visited[], ArrayList<ArrayList<Integer>> adj) {
+        code: `public void dfs(int v, boolean visited[], ArrayList < ArrayList < Integer >> adj) {
     visited[v] = true;
     System.out.print(v + " ");
     for (Integer n : adj.get(v)) {
         if (!visited[n])
             dfs(n, visited, adj);
     }
-}`
+} `
+    },
+    {
+        id: 'graph-adj-list-java',
+        topic: 'Graph',
+        title: 'Adjacency List',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `public void addEdge(ArrayList < ArrayList < Integer >> adj, int u, int v) {
+    adj.get(u).add(v);
+    adj.get(v).add(u); // Remove for directed graph
+} `
     }
 ];
 

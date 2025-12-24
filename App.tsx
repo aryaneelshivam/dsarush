@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { generateSnippet } from './services/geminiService';
 import { TypingArea } from './components/TypingArea';
+import { JumbledArea } from './components/JumbledArea';
 import { TypingStats } from './components/TypingStats';
 import { SettingsBar } from './components/SettingsBar';
-import { Snippet, TestStats, Difficulty, Language, SessionHistory, Session } from './types';
+import { Snippet, TestStats, Difficulty, Language, SessionHistory, Session, GameMode } from './types';
 import { DEFAULT_SNIPPETS } from './constants';
 import { Terminal, Github, Keyboard, Command, Loader2 } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   const [subTopic, setSubTopic] = useState<string | undefined>(undefined);
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.EASY);
   const [language, setLanguage] = useState<Language>('cpp');
+  const [mode, setMode] = useState<GameMode>('typing');
 
   const [history, setHistory] = useState<SessionHistory>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -154,6 +156,8 @@ const App: React.FC = () => {
               setDifficulty={handleDifficultyChange}
               language={language}
               setLanguage={handleLanguageChange}
+              mode={mode}
+              setMode={setMode}
               loading={loading}
             />
 
@@ -171,11 +175,18 @@ const App: React.FC = () => {
                   <span className="w-1 h-1 bg-mt-sub/30 rounded-full"></span>
                   <span>{currentSnippet.language}</span>
                 </div>
-                <TypingArea
-                  snippet={currentSnippet}
-                  onComplete={handleTestComplete}
-                  focused={!loading && !stats}
-                />
+                {mode === 'typing' ? (
+                  <TypingArea
+                    snippet={currentSnippet}
+                    onComplete={handleTestComplete}
+                    focused={!loading && !stats}
+                  />
+                ) : (
+                  <JumbledArea
+                    snippet={currentSnippet}
+                    onComplete={handleTestComplete}
+                  />
+                )}
               </>
             )}
           </>

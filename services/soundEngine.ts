@@ -24,7 +24,7 @@ export class SoundEngine {
         }
     }
 
-    public playClick(type: 'correct' | 'error' | 'combo') {
+    public playClick(type: 'correct' | 'error' | 'combo' | 'drag' | 'drop' | 'place_correct') {
         if (!this.ctx) {
             this.init();
         }
@@ -70,6 +70,40 @@ export class SoundEngine {
 
             osc.start(t);
             osc.stop(t + 0.2);
+        } else if (type === 'drag') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, t);
+            osc.frequency.linearRampToValueAtTime(450, t + 0.05);
+
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.1, t + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+            osc.start(t);
+            osc.stop(t + 0.05);
+        } else if (type === 'drop') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(200, t);
+            osc.frequency.linearRampToValueAtTime(150, t + 0.1);
+
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.2, t + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+
+            osc.start(t);
+            osc.stop(t + 0.1);
+        } else if (type === 'place_correct') {
+            // A higher pitched, short "tink" sound
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200, t);
+            osc.frequency.exponentialRampToValueAtTime(800, t + 0.05);
+
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.15, t + 0.005);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+
+            osc.start(t);
+            osc.stop(t + 0.05);
         }
     }
 }
