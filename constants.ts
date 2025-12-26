@@ -10,7 +10,8 @@ export const TOPICS = [
     "Merge Sort",
     "Quick Sort",
     "Heap",
-    "Trie"
+    "Trie",
+    "Hash Map"
 ];
 
 // Comprehensive library of offline C++ and Java snippets
@@ -1525,6 +1526,91 @@ class Queue {
 } `
     },
 
+    // --- HASH MAP (C++) ---
+    {
+        id: 'hashmap-struct',
+        topic: 'Hash Map',
+        title: 'Node Structure',
+        difficulty: Difficulty.EASY,
+        language: 'cpp',
+        code: `struct Node {
+    int key;
+    int value;
+    Node* next;
+};`,
+        explanations: [
+            { line: 1, text: "Defines a node for handling collisions using chaining." },
+            { line: 2, text: "Stores the search key." },
+            { line: 3, text: "Stores the data associated with the key." },
+            { line: 4, text: "Pointer to the next node in the chain." }
+        ]
+    },
+    {
+        id: 'hashmap-implementation',
+        topic: 'Hash Map',
+        title: 'HashMap Class',
+        difficulty: Difficulty.MEDIUM,
+        language: 'cpp',
+        code: `class HashMap {
+private:
+    static const int TABLE_SIZE = 1000;
+    Node* table[TABLE_SIZE];
+    int hashfunction(int key) {
+        return key % TABLE_SIZE;
+    }
+public:
+    HashMap() {
+        for(int i = 0; i < TABLE_SIZE; i++) table[i] = NULL;
+    }
+    void insert(int key, int value) {
+        int index = hashfunction(key);
+        Node* curr = table[index];
+        while(curr != NULL) {
+            if(curr->key == key) {
+                curr->value = value;
+                return;
+            }
+            curr = curr->next;
+        }
+        Node* newnode = new Node{key, value, table[index]};
+        table[index] = newnode;
+    }
+    void search(int key) {
+        int index = hashfunction(key);
+        Node* temp = table[index];
+        while(temp != NULL) {
+            if(temp->key == key) {
+                cout << "Key found, value: " << temp->value << endl;
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Key not found" << endl;
+    }
+    void remove(int key) {
+        int index = hashfunction(key);
+        Node* temp = table[index];
+        Node* prev = NULL;
+        while(temp != NULL) {
+            if(temp->key == key) {
+                if(prev == NULL) table[index] = temp->next;
+                else prev->next = temp->next;
+                delete temp;
+                return;
+            }
+            prev = temp;
+            temp = temp->next;
+        }
+    }
+};`,
+        explanations: [
+            { line: 3, text: "Fixed size for the hash table array." },
+            { line: 5, text: "Simple modulo hash function for integers." },
+            { line: 13, text: "Chaining handles collisions by adding to the head of the list." },
+            { line: 26, text: "Traverse the chain at hash(key) to find the element." }
+        ]
+    },
+
     // --- SORTING (Java) ---
     {
         id: 'merge-sort-java',
@@ -1845,6 +1931,85 @@ public boolean search(TrieNode root, String key) {
         pCrawl = pCrawl.children[index];
     }
     return (pCrawl != null && pCrawl.isEndOfWord);
+} `
+    },
+
+    // --- HASH MAP (Java) ---
+    {
+        id: 'hashmap-struct-java',
+        topic: 'Hash Map',
+        title: 'Node Structure',
+        difficulty: Difficulty.EASY,
+        language: 'java',
+        code: `class Node {
+    int key;
+    int value;
+    Node next;
+
+    Node(int key, int value) {
+        this.key = key;
+        this.value = value;
+        this.next = null;
+    }
+} `
+    },
+    {
+        id: 'hashmap-implementation-java',
+        topic: 'Hash Map',
+        title: 'HashMap Class',
+        difficulty: Difficulty.MEDIUM,
+        language: 'java',
+        code: `class HashMap {
+    private static final int TABLE_SIZE = 1000;
+    private Node[] table;
+
+    public HashMap() {
+        table = new Node[TABLE_SIZE];
+    }
+
+    private int hashFunction(int key) {
+        return Math.abs(key) % TABLE_SIZE;
+    }
+
+    public void insert(int key, int value) {
+        int index = hashFunction(key);
+        Node head = table[index];
+        while (head != null) {
+            if (head.key == key) {
+                head.value = value;
+                return;
+            }
+            head = head.next;
+        }
+        Node newNode = new Node(key, value);
+        newNode.next = table[index];
+        table[index] = newNode;
+    }
+
+    public Integer search(int key) {
+        int index = hashFunction(key);
+        Node head = table[index];
+        while (head != null) {
+            if (head.key == key) return head.value;
+            head = head.next;
+        }
+        return null; // Key not found
+    }
+
+    public void remove(int key) {
+        int index = hashFunction(key);
+        Node head = table[index];
+        Node prev = null;
+        while (head != null) {
+            if (head.key == key) {
+                if (prev == null) table[index] = head.next;
+                else prev.next = head.next;
+                return;
+            }
+            prev = head;
+            head = head.next;
+        }
+    }
 } `
     },
 
