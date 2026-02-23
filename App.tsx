@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { generateSnippet } from './services/geminiService';
 import { TypingArea } from './components/TypingArea';
 import { JumbledArea } from './components/JumbledArea';
@@ -6,11 +6,20 @@ import { TypingStats } from './components/TypingStats';
 import { SettingsBar } from './components/SettingsBar';
 import { Snippet, TestStats, Difficulty, Language, SessionHistory, Session, GameMode } from './types';
 import { DEFAULT_SNIPPETS } from './constants';
-import { Terminal, Github, Keyboard, Command, Loader2, Info, X } from 'lucide-react';
+import { Terminal, Github, Keyboard, Command, Loader2, Info, X, Monitor } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
 import { storageService } from './services/storageService';
 
+const MOBILE_BREAKPOINT = 1024;
+
 const App: React.FC = () => {
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth < MOBILE_BREAKPOINT);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const [currentSnippet, setCurrentSnippet] = useState<Snippet>(DEFAULT_SNIPPETS[0]);
   const [stats, setStats] = useState<TestStats | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -111,6 +120,26 @@ const App: React.FC = () => {
   const restart = () => {
     fetchNewSnippet(topic, subTopic, difficulty, language);
   };
+
+  if (isMobile) {
+    return (
+      <div className="min-h-screen w-full bg-mt-bg text-mt-text flex flex-col items-center justify-center p-8 font-mono">
+        <div className="flex flex-col items-center gap-6 text-center max-w-xs">
+          <img src="/rushlogo.png" alt="DSArush Logo" className="w-16 h-16 object-contain opacity-80" />
+          <Monitor size={48} className="text-mt-main" />
+          <div>
+            <h1 className="text-xl font-bold text-mt-text mb-2">Desktop Only</h1>
+            <p className="text-mt-sub text-sm leading-relaxed">
+              DSArush is designed for keyboard-based practice and works best on a
+              <span className="text-mt-text"> desktop or laptop</span>.
+              Please switch to a larger device to get started.
+            </p>
+          </div>
+          <span className="mt-2 text-mt-sub/40 text-xs tracking-widest uppercase">dsarush.com</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-mt-bg text-mt-text flex flex-col items-center p-4 md:p-10 pt-4 md:pt-8 overflow-x-hidden font-mono selection:bg-mt-main selection:text-mt-bg">
