@@ -6,7 +6,7 @@ import { TypingStats } from './components/TypingStats';
 import { SettingsBar } from './components/SettingsBar';
 import { Snippet, TestStats, Difficulty, Language, SessionHistory, Session, GameMode } from './types';
 import { DEFAULT_SNIPPETS } from './constants';
-import { Terminal, Github, Keyboard, Command, Loader2 } from 'lucide-react';
+import { Terminal, Github, Keyboard, Command, Loader2, Info, X } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
 import { storageService } from './services/storageService';
 
@@ -23,6 +23,7 @@ const App: React.FC = () => {
 
   const [history, setHistory] = useState<SessionHistory>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showAbout, setShowAbout] = useState<boolean>(false);
 
   const fetchNewSnippet = useCallback(async (selectedTopic: string, selectedSubTopic: string | undefined, selectedDiff: Difficulty, selectedLang: Language) => {
     setLoading(true);
@@ -215,13 +216,77 @@ const App: React.FC = () => {
         </div>
 
         <div className="flex gap-4 items-center flex-1 justify-end">
-          <a href="#" className="hover:text-mt-text flex items-center gap-1.5 transition-colors">
+          <button onClick={() => setShowAbout(true)} className="hover:text-mt-text flex items-center gap-1.5 transition-colors">
+            <Info size={14} />
+            <span>about</span>
+          </button>
+          <a href="https://github.com/aryaneelshivam/dsarush" target="_blank" rel="noopener noreferrer" className="hover:text-mt-text flex items-center gap-1.5 transition-colors">
             <Github size={14} />
             <span>github</span>
           </a>
         </div>
       </footer>
       <Analytics />
+
+      {/* About Modal */}
+      {showAbout && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-fix"
+          onClick={() => setShowAbout(false)}
+        >
+          <div
+            className="relative bg-mt-bg border border-mt-sub/20 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-mt-text"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowAbout(false)}
+              className="absolute top-4 right-4 text-mt-sub hover:text-mt-text transition-colors"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="flex items-center gap-3 mb-5">
+              <img src="/rushlogo.png" alt="DSArush Logo" className="w-10 h-10 object-contain" />
+              <div>
+                <h2 className="text-xl font-bold text-mt-text">DSArush</h2>
+                <p className="text-mt-sub text-xs">master dsa patterns through typing</p>
+              </div>
+            </div>
+
+            <p className="text-mt-sub text-sm leading-relaxed mb-5">
+              DSArush is a <span className="text-mt-text">MonkeyType-inspired</span> typing tutor built for developers who want to internalize Data Structures & Algorithms patterns in <span className="text-mt-text">C++</span>, <span className="text-mt-text">Java</span>, and <span className="text-mt-text">Python</span>.
+            </p>
+
+            <div className="border-t border-mt-sub/15 pt-4 mb-5">
+              <p className="text-mt-sub/60 text-xs uppercase tracking-widest mb-3">built with</p>
+              <div className="flex flex-wrap gap-2">
+                {['React 19', 'TypeScript', 'Vite', 'Tailwind CSS', 'Framer Motion'].map((tech) => (
+                  <span key={tech} className="px-2.5 py-1 rounded-md bg-mt-sub/10 text-mt-sub text-xs">{tech}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-xs text-mt-sub/60">
+              <a
+                href="https://www.linkedin.com/in/aryaneelshivam/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-mt-text transition-colors underline underline-offset-4 decoration-mt-sub/30"
+              >
+                Made by Aryaneel Shivam
+              </a>
+              <a
+                href="https://github.com/aryaneelshivam/dsarush"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-mt-text transition-colors flex items-center gap-1"
+              >
+                <Github size={12} /> source code
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

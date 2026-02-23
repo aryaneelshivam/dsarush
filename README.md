@@ -1,90 +1,124 @@
 # DSArush ⚡
 
-Master Data Structures and Algorithms with speed and precision. **DSArush** is a Monkeytype-inspired speed-typing practice tool specifically designed for developers to internalize DSA patterns and syntax. Try it live at [dsarush.vercel.app](https://dsarush.vercel.app).
+![DSArush](https://img.shields.io/badge/dsarush.com-live-e2b714?style=for-the-badge&logo=vercel&logoColor=white)
+![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 
-![DSArush Hero](index.html) <!-- Placeholder for a real screenshot if available -->
+> Master Data Structures & Algorithms with speed and precision.
 
-## 🚀 Overview
+**DSArush** is a [Monkeytype](https://monkeytype.com/)-inspired speed-typing practice tool designed specifically for developers to build muscle memory around DSA patterns and syntax. Try it live at **[dsarush.com](https://dsarush.com)**.
 
-DSArush helps you build muscle memory for common algorithmic patterns across multiple programming languages. Whether you're preparing for technical interviews or just want to sharpen your coding speed, DSArush provides a curated library of snippets to practice.
+---
 
-## ✨ Key Features
+## ✨ Features
 
--   **🎯 DSA Master Library:** Wide range of topics including Arrays, Linked Lists, BST, Stacks, Queues, Graphs, and Sorting algorithms.
--   **🌐 Multi-Language Support:** Practice in **C++**, **Java**, or **Python**.
--   **📊 Real-time Analytics:** Track your WPM (Words Per Minute), Accuracy, Time Elapsed, and Max Combo.
--   **⚡ Difficulty Levels:** Choose from Easy, Medium, and Hard snippets to match your skill level.
--   **🎹 Developer-Focused UI:** Minimalistic, keyboard-centric interface with syntax highlighting and automatic indentation support.
--   **📖 Contextual Explanations:** Many snippets include line-by-line explanations to help you understand the *why* behind the *how*.
+| Feature | Description |
+|---|---|
+| 🎯 **DSA Snippet Library** | Arrays, Linked Lists, BST, Stacks, Queues, Graphs, Heaps, Sorting, Hash Maps, and more |
+| 🌐 **Multi-Language** | Practice in **C++**, **Java**, or **Python** |
+| 🎮 **Two Game Modes** | Classic **Typing** mode and **Jumbled** mode (reorder shuffled code blocks) |
+| 📊 **Real-time Analytics** | Live WPM, Accuracy, Combo & Time tracking with detailed end-of-session stats |
+| ⚡ **Difficulty Levels** | Easy, Medium, and Hard snippets to match your skill level |
+| 🎨 **Multiple Themes** | Monodark, Carbon, Nord, Midnight, Serika Dark |
+| 🔊 **Sound Engine** | Satisfying keypress audio with toggleable sound effects |
+| 📖 **Code Explanations** | Line-by-line explanations for in-depth understanding |
+| 📈 **Session History** | Track your progress over time with persistent local storage |
+| ⌨️ **Keyboard-Centric** | Distraction-free, keyboard-first interface with smart indent support |
+
+---
 
 ## 🛠️ Tech Stack
 
--   **Framework:** [React 19](https://react.dev/)
--   **Build Tool:** [Vite](https://vitejs.dev/)
--   **Language:** [TypeScript](https://www.typescriptlang.org/)
--   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
--   **Icons:** [Lucide React](https://lucide.dev/)
+- **Framework:** [React 19](https://react.dev/)
+- **Build Tool:** [Vite](https://vitejs.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Animation:** [Framer Motion](https://www.framer.com/motion/)
+- **Drag & Drop:** [@dnd-kit](https://dndkit.com/) (for Jumbled mode)
+- **Analytics:** [Vercel Analytics](https://vercel.com/analytics)
+
+---
 
 ## 📂 Project Structure
 
 ```text
 dsarush/
-├── src/
-│   ├── components/       # UI Components (TypingArea, SettingsBar, etc.)
-│   ├── services/         # Logic for snippet generation (Gemini integration ready)
-│   ├── constants.ts      # Static snippet library and topic list
-│   ├── types.ts          # TypeScript interfaces/enums
-│   ├── utils/            # Helper functions (Syntax highlighting, etc.)
-│   └── App.tsx           # Main application shell
-├── index.tsx             # Entry point
-└── index.html            # App template and Tailwind configuration
+├── components/
+│   ├── TypingArea.tsx       # Core typing engine with real-time feedback
+│   ├── JumbledArea.tsx      # Drag-and-drop code block reordering mode
+│   ├── TypingStats.tsx      # End-of-session results & history panel
+│   ├── SettingsBar.tsx      # Topic/difficulty/language/mode controls
+│   └── CodeExplainer.tsx    # Line-by-line code explanation viewer
+├── services/
+│   ├── geminiService.ts     # Snippet fetching & generation logic
+│   ├── storageService.ts    # localStorage session persistence
+│   └── soundEngine.ts       # Audio feedback system
+├── utils/
+│   └── syntaxHighlighter.ts # Token-based syntax highlighting engine
+├── constants.ts             # Full curated DSA snippet library
+├── types.ts                 # TypeScript interfaces and enums
+├── App.tsx                  # Main application shell
+├── index.tsx                # React entry point
+└── index.html               # App template, Tailwind config & SEO meta
 ```
+
+---
 
 ## ⚙️ Setup & Installation
 
-Follow these steps to run DSArush locally:
+```bash
+# 1. Clone the repository
+git clone https://github.com/aryaneelshivam/dsarush.git
+cd dsarush
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/aryaneelshivam/dsarush.git
-    cd dsarush
-    ```
+# 2. Install dependencies
+npm install
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+# 3. Start the development server
+npm run dev
+```
 
-3.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-4.  **Open in Browser:**
-    Navigate to `http://localhost:5173`.
+---
 
-## 🛠️ Customization
+## 🎮 How to Use
 
-### Adding New Snippets
-You can easily extend the snippet library by modifying `src/constants.ts`. Add a new object to the `DEFAULT_SNIPPETS` array:
+1. **Pick a Topic** — select from the sidebar (Arrays, Graphs, BST, etc.)
+2. **Choose a Mode** — `Typing` to transcribe code or `Jumbled` to reorder shuffled blocks
+3. **Select Difficulty & Language** — Easy / Medium / Hard in C++, Java, or Python
+4. **Start Typing** — real-time highlighting shows correct (gold) vs. error (red) characters
+5. **Press `Esc`** at any time to load a new snippet
+6. **Review Stats** — see WPM, accuracy, and compare with your session history
+
+---
+
+## 🧩 Extending the Snippet Library
+
+You can add new snippets by appending to the `DEFAULT_SNIPPETS` array in `constants.ts`:
 
 ```typescript
 {
   id: 'unique-id',
-  topic: 'Array',
-  title: 'My Custom Pattern',
+  topic: 'Graph',
+  title: 'BFS Traversal',
   difficulty: Difficulty.MEDIUM,
   language: 'cpp',
   code: `// Your code here`,
   explanations: [
-    { line: 1, text: "Wait, what's this?" }
+    { line: 1, text: "Start BFS from source node" }
   ]
 }
 ```
+
+---
 
 ## 🎨 Design Inspiration
 
 DSArush's minimalistic aesthetic and "type-what-you-see" core loop are heavily inspired by [Monkeytype](https://monkeytype.com/).
 
 ---
+
 *Made with ☕️ by [Aryaneel Shivam](https://www.linkedin.com/in/aryaneelshivam/)*

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dsarush.vercel.app/sitemap.xml
+Sitemap: https://dsarush.com/sitemap.xml
