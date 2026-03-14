@@ -367,7 +367,7 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
   };
 
   return (
-    <div className={`w-full max-w-6xl relative group outline-none ${errorShake ? 'animate-shake' : ''}`} tabIndex={0}>
+    <div className={`w-full max-w-[1400px] relative group outline-none ${errorShake ? 'animate-shake' : ''}`} tabIndex={0}>
       {/* Focus Overlay */}
       {!focused && (
         <div className="absolute inset-0 z-50 backdrop-blur-fix flex items-center justify-center bg-mt-bg/50 transition-opacity duration-300 rounded-lg">

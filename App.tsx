@@ -158,7 +158,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <div className="w-full max-w-6xl flex flex-col items-center p-4 md:p-10 pt-4 md:pt-6 flex-1">
+      <div className="w-full max-w-[1400px] flex flex-col items-center p-4 md:p-10 pt-4 md:pt-6 flex-1">
         {/* Header */}
         <header className="w-full flex justify-between items-end mb-6">
         <div className="flex items-center gap-4">
@@ -216,7 +216,7 @@ const App: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="w-full max-w-6xl mb-2 text-mt-sub/50 text-xs text-right flex items-center justify-end gap-2">
+                <div className="w-full max-w-[1400px] mb-2 text-mt-sub/50 text-xs text-right flex items-center justify-end gap-2">
                   <span className="font-bold">{currentSnippet.title ? currentSnippet.title : currentSnippet.topic}</span>
                   {currentSnippet.sourceUrl && currentSnippet.sourceName && (
                     <>
@@ -256,7 +256,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-6xl mt-12 flex flex-col md:flex-row justify-between items-center gap-4 text-mt-sub text-xs">
+      <footer className="w-full max-w-[1400px] mt-12 flex flex-col md:flex-row justify-between items-center gap-4 text-mt-sub text-xs">
         <div className="flex gap-6 flex-1">
           <span className="flex items-center gap-1.5 cursor-help hover:text-mt-text transition-colors">
             <Command size={12} />
