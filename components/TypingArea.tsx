@@ -151,6 +151,11 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
         if (spaceCount > 0) {
           const spacesToInsert = spaceCount >= 4 ? 4 : spaceCount;
           charToAdd = ' '.repeat(spacesToInsert);
+        } else if (remainingCode.startsWith('//')) {
+          // UX Enhancement: Skip comments using Tab
+          let newlineIdx = remainingCode.indexOf('\n');
+          if (newlineIdx === -1) newlineIdx = remainingCode.length;
+          charToAdd = remainingCode.slice(0, newlineIdx);
         } else {
           charToAdd = '  ';
         }
@@ -168,8 +173,84 @@ export const TypingArea: React.FC<TypingAreaProps> = ({ snippet, onComplete, foc
         }
       } else {
         const nextIndex = userInput.length;
-        const expectedChar = targetCode.slice(nextIndex, nextIndex + charToAdd.length);
-        isCorrect = charToAdd === expectedChar;
+        const expectedSlice = targetCode.slice(nextIndex, nextIndex + charToAdd.length);
+        isCorrect = charToAdd === expectedSlice;
+
+        // Apply single-character UX heuristics if they typed a single character
+        if (charToAdd.length === 1) {
+          const expectedChar = targetCode[nextIndex] || '';
+          
+          if (!isCorrect) {
+            // Rule 1 & 2: Forgiving spaces before `{`, `(`, or after `,` or `=`
+            const forgivingChars = ['{', '('];
+            if (expectedChar === ' ') {
+              let lookaheadIndex = nextIndex;
+              while (lookaheadIndex < targetCode.length && targetCode[lookaheadIndex] === ' ') {
+                lookaheadIndex++;
+              }
+              if (lookaheadIndex < targetCode.length && targetCode[lookaheadIndex] === charToAdd) {
+                const prevChar = userInput[nextIndex - 1];
+                if (forgivingChars.includes(charToAdd) || prevChar === ',' || prevChar === '=') {
+                  isCorrect = true;
+                  charToAdd = targetCode.slice(nextIndex, lookaheadIndex + 1);
+                }
+              }
+            }
+            
+            // Rule 3: Semicolon-Newline Forgiveness
+            if (!isCorrect && expectedChar === ';' && charToAdd === '\n') {
+              if (targetCode[nextIndex + 1] === '\n') {
+                isCorrect = true;
+                charToAdd = ';\n';
+                let i = nextIndex + 2;
+                while (i < targetCode.length && targetCode[i] === ' ') {
+                  charToAdd += ' ';
+                  i++;
+                }
+              }
+            }
+            
+            // Rule 5: Auto-closing Brackets/Quotes skipping
+            if (!isCorrect) {
+              const closingChars = [')', ']', '}', '"', '\''];
+              if (closingChars.includes(expectedChar) && charToAdd === targetCode[nextIndex + 1]) {
+                isCorrect = true;
+                charToAdd = expectedChar + charToAdd; 
+              }
+            }
+            
+            // Rule 6: Early auto-close muscle memory forgiveness
+            // If they type `)` early, and `)` is expected later on the same line, just absorb it.
+            if (!isCorrect) {
+              const autoCloseChars = [')', ']', '}', '"', '\''];
+              if (autoCloseChars.includes(charToAdd)) {
+                let nIdx = nextIndex;
+                let foundMatch = false;
+                while (nIdx < targetCode.length && targetCode[nIdx] !== '\n') {
+                  if (targetCode[nIdx] === charToAdd) {
+                    foundMatch = true;
+                    break;
+                  }
+                  nIdx++;
+                }
+                if (foundMatch) {
+                  return; // Ignore the keypress entirely to preserve flow
+                }
+              }
+            }
+          }
+          
+          // Rule 4: Forgiving Consecutive Spaces
+          if (isCorrect && charToAdd === ' ') {
+            let lookaheadIndex = nextIndex;
+            while (lookaheadIndex < targetCode.length && targetCode[lookaheadIndex] === ' ') {
+              lookaheadIndex++;
+            }
+            if (lookaheadIndex > nextIndex + 1) {
+              charToAdd = targetCode.slice(nextIndex, lookaheadIndex);
+            }
+          }
+        }
       }
 
       if (!isCorrect) {

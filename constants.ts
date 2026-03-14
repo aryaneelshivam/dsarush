@@ -1,6 +1,8 @@
 import { Difficulty, Snippet, Language } from './types';
+import { TOP_QUESTION_SNIPPETS } from './topQuestionSnippets';
 
 export const TOPICS = [
+    "Top Questions",
     "Array",
     "Linked List",
     "Binary Search Tree",
@@ -2070,7 +2072,8 @@ public boolean search(TrieNode root, String key) {
     adj.get(u).add(v);
     adj.get(v).add(u); // Remove for directed graph
 } `
-    }
+    },
+    ...TOP_QUESTION_SNIPPETS,
 ];
 
 // Helper to get available operations for a topic, filtered by language

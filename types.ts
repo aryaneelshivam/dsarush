@@ -21,6 +21,8 @@ export interface Snippet {
   difficulty: Difficulty;
   language: Language;
   explanations?: Explanation[];
+  sourceUrl?: string;
+  sourceName?: string;
 }
 
 export interface TestStats {

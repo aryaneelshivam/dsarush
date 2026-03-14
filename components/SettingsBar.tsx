@@ -166,7 +166,9 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
         {/* Right: Language */}
         <div className="flex items-center gap-4 flex-shrink-0 justify-end relative">
           {/* Language Dropdown */}
-          <div className="relative flex items-center group cursor-pointer text-mt-sub hover:text-mt-text transition-colors gap-2 bg-mt-bg/30 px-3 py-1.5 rounded hover:bg-mt-sub/10">
+          <div className={`relative flex items-center group cursor-pointer transition-colors gap-2 px-3 py-1.5 rounded 
+            ${currentTopic === 'Top Questions' && language === 'java' ? 'text-mt-error bg-mt-error/10' : 'text-mt-sub hover:text-mt-text bg-mt-bg/30 hover:bg-mt-sub/10'}
+          `} title={currentTopic === 'Top Questions' ? 'Top Questions are currently C++ only' : ''}>
             <Code2 size={12} />
             <span className="uppercase">{language}</span>
             <ChevronDown size={12} className="opacity-50" />
@@ -174,11 +176,11 @@ export const SettingsBar: React.FC<SettingsBarProps> = ({
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as Language)}
-              disabled={loading}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none"
+              disabled={loading || currentTopic === 'Top Questions'}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer appearance-none disabled:cursor-not-allowed"
             >
               <option value="cpp">C++</option>
-              <option value="java">Java</option>
+              <option value="java" disabled={currentTopic === 'Top Questions'}>Java</option>
             </select>
           </div>
 

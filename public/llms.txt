@@ -1,0 +1,30 @@
+# DSArush - Master DSA Patterns Through Typing
+
+> "The fastest way to internalize Data Structures and Algorithms."
+
+DSArush (https://dsarush.com) is an open-source, highly opinionated typing tutor designed explicitly for software engineers to build muscle memory for the 14 most common Data Structures and Algorithms (DSA) patterns.
+
+It combines the fluid, distraction-free typing mechanics of MonkeyType with curated, high-quality algorithmic implementations in C++ (and Java).
+
+## Key Features
+
+1. **Top 70 LeetCode Patterns**: The platform now includes the widely recognized "14 Patterns to Ace Any Coding Interview", offering 70 of the most frequently asked LeetCode questions (e.g. Two Sum, Max Area of Island, LRU Cache) organized by pattern.
+2. **Forgiving IDE-like Developer UX**: Unlike standard typing tests, DSArush accommodates developer muscle memory. It auto-fills spaces before brackets, forgives early "auto-close" parenthesis habits, skips alignment gaps, and lets you Tab through comments. 
+3. **Paced Visuals & Syntax Highlighting**: Features real-time AST-based syntax highlighting, dynamic combination multipliers (e.g., "8.0x Stream"), and subtle visual cues designed to induce a flow state.
+4. **Jumbled Mode**: A challenging mode where the algorithm's lines are shuffled, and the user must type them in the conceptually correct order to rebuild the logic.
+
+## Technical Stack
+- React 19 
+- TypeScript
+- Vite
+- Tailwind CSS 
+- Framer Motion
+
+## Core Audience
+Computer Science students, software developers, and competitive programmers who want to transition from simply "understanding" an algorithm to being able to write it flawlessly and effortlessly from memory during technical interviews or competitive programming contests.
+
+## Author & Links
+- **Creator**: Aryaneel Shivam
+- **Website**: https://dsarush.com
+- **GitHub**: https://github.com/aryaneelshivam/dsarush
+- **Contact**: https://www.linkedin.com/in/aryaneelshivam/

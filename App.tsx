@@ -6,7 +6,7 @@ import { TypingStats } from './components/TypingStats';
 import { SettingsBar } from './components/SettingsBar';
 import { Snippet, TestStats, Difficulty, Language, SessionHistory, Session, GameMode } from './types';
 import { DEFAULT_SNIPPETS } from './constants';
-import { Terminal, Github, Keyboard, Command, Loader2, Info, X, Monitor } from 'lucide-react';
+import { Terminal, Github, Keyboard, Command, Loader2, Info, X, Monitor, ExternalLink, Brain } from 'lucide-react';
 import { Analytics } from "@vercel/analytics/react";
 import { storageService } from './services/storageService';
 
@@ -24,7 +24,7 @@ const App: React.FC = () => {
   const [stats, setStats] = useState<TestStats | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [topic, setTopic] = useState<string>('Linked List');
+  const [topic, setTopic] = useState<string>('Top Questions');
   const [subTopic, setSubTopic] = useState<string | undefined>(undefined);
   const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.EASY);
   const [language, setLanguage] = useState<Language>('cpp');
@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [history, setHistory] = useState<SessionHistory>([]);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showAbout, setShowAbout] = useState<boolean>(false);
+  const [showBanner, setShowBanner] = useState<boolean>(true);
 
   const fetchNewSnippet = useCallback(async (selectedTopic: string, selectedSubTopic: string | undefined, selectedDiff: Difficulty, selectedLang: Language) => {
     setLoading(true);
@@ -142,9 +143,24 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-mt-bg text-mt-text flex flex-col items-center p-4 md:p-10 pt-4 md:pt-8 overflow-x-hidden font-mono selection:bg-mt-main selection:text-mt-bg">
-      {/* Header */}
-      <header className="w-full max-w-6xl flex justify-between items-end mb-6">
+    <div className="min-h-screen w-full bg-mt-bg text-mt-text flex flex-col items-center overflow-x-hidden font-mono selection:bg-mt-main selection:text-mt-bg">
+      {/* Announcement Banner */}
+      {showBanner && (
+        <div className="w-full bg-mt-main text-mt-bg text-center py-1.5 px-8 text-xs font-bold tracking-wide flex items-center justify-center gap-2 shadow-sm relative z-50">
+          <Brain size={12} className="shrink-0" />
+          <span>NEW: Top 70 LeetCode patterns added to DSArush! 🔥</span>
+          <button 
+            onClick={() => setShowBanner(false)}
+            className="absolute right-4 hover:bg-mt-bg/20 rounded p-0.5 transition-colors"
+          >
+            <X size={12} />
+          </button>
+        </div>
+      )}
+
+      <div className="w-full max-w-6xl flex flex-col items-center p-4 md:p-10 pt-4 md:pt-6 flex-1">
+        {/* Header */}
+        <header className="w-full flex justify-between items-end mb-6">
         <div className="flex items-center gap-4">
           <div className="p-1">
             <img src="/rushlogo.png" alt="DSArush Logo" className="w-12 h-12 object-contain" />
@@ -202,6 +218,20 @@ const App: React.FC = () => {
               <>
                 <div className="w-full max-w-6xl mb-2 text-mt-sub/50 text-xs text-right flex items-center justify-end gap-2">
                   <span className="font-bold">{currentSnippet.title ? currentSnippet.title : currentSnippet.topic}</span>
+                  {currentSnippet.sourceUrl && currentSnippet.sourceName && (
+                    <>
+                      <span className="w-1 h-1 bg-mt-sub/30 rounded-full"></span>
+                      <a 
+                        href={currentSnippet.sourceUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-mt-text hover:text-mt-main transition-colors flex items-center gap-1"
+                      >
+                        {currentSnippet.sourceName}
+                        <ExternalLink size={10} className="opacity-40" />
+                      </a>
+                    </>
+                  )}
                   <span className="w-1 h-1 bg-mt-sub/30 rounded-full"></span>
                   <span>{currentSnippet.language}</span>
                 </div>
@@ -316,6 +346,7 @@ const App: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
